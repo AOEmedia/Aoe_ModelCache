@@ -18,10 +18,11 @@ class Aoe_ModelCache_Helper_Data extends Mage_Core_Helper_Abstract {
 	 *
 	 * @param string $model
 	 * @param int $id
+     * @param string $field
 	 * @param bool $clean
 	 * @return Mage_Core_Model_Abstract|bool
 	 */
-	public function get($model, $id, $clean=false) {
+	public function get($model, $id, $field=null, $clean=false) {
 		if ($clean) {
 			$this->removeFromCache($model, $id);
 		}
@@ -31,18 +32,30 @@ class Aoe_ModelCache_Helper_Data extends Mage_Core_Helper_Abstract {
 			if (!isset($this->_cache[$model])) {
 				$this->_cache[$model] = array();
 			}
-			$object = Mage::getModel($model);
+			$object = Mage::getModel($model); /* @var $object Mage_Core_Model_Abstract */
 			if (!$object) {
 				// Mage::throwException(sprintf('Could not find model "%s"', htmlspecialchars($model)));
 				Mage::log(sprintf('Could not find model "%s"', htmlspecialchars($model)));
 				$object = false;
 			} else {
-				/* @var $object Mage_Core_Model_Abstract */
-				$object->load($id);
-				if ($object->getId() != $id) {
+
+                if (isset($field) && method_exists($object, 'loadByAttribute')) {
+                    if ($loadedObject = $object->loadByAttribute($field, $id)) {
+                        $object = $loadedObject;
+                    }
+                } else {
+                    $object->load($id, $field);
+                }
+
+				if ((!isset($field) && $object->getId() != $id) || $object->getData($field) != $id) {
 					// Mage::throwException(sprintf('Model "%s" with id "%s" not found', htmlspecialchars($model), htmlspecialchars($id)));
 					Mage::log(sprintf('Model "%s" with id "%s" not found', htmlspecialchars($model), htmlspecialchars($id)));
-				}
+				} else {
+                    // Also add the object to the cache by id field name if loaded by attribute
+                    if (isset($field) && $field != $object->getIdFieldName()) {
+                        $this->_cache[$model][$object->getId()] = $object;
+                    }
+                }
 			}
 			$this->_cache[$model][$id] = $object;
 		}
