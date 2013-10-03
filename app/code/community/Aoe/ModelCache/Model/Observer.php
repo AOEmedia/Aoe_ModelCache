@@ -8,54 +8,58 @@
  * These items are candidates to be stored in the model cache
  *
  * @author Fabrizio Branca
- * @since 2013-05-08
+ * @since  2013-05-08
  */
-class Aoe_ModelCache_Model_Observer {
+class Aoe_ModelCache_Model_Observer
+{
 
-	protected $data = array();
-	protected $loadedModels = 0;
+    protected $data = array();
+    protected $loadedModels = 0;
 
-	/**
-	 * Log data
-	 *
-	 * @param Varien_Event_Observer $event
-	 */
-	public function log(Varien_Event_Observer $event) {
-		$object = $event->getObject(); /* @var $object Mage_Core_Model_Abstract */
-		$class = get_class($object);
-		$id = $event->getValue();
+    /**
+     * Log data
+     *
+     * @param Varien_Event_Observer $event
+     */
+    public function log(Varien_Event_Observer $event)
+    {
+        $object = $event->getObject();
+        /* @var $object Mage_Core_Model_Abstract */
+        $class = get_class($object);
+        $id = $event->getValue();
 
-		if (!isset($this->data[$class])) {
-			$this->data[$class] = array();
-		}
-		if (!isset($this->data[$class][$id])) {
-			$this->data[$class][$id] = array();
-		}
-		$trace = debug_backtrace();
-		$this->data[$class][$id][] = $trace[5]['file'] . ':' . $trace[5]['line'];
+        if (!isset($this->data[$class])) {
+            $this->data[$class] = array();
+        }
+        if (!isset($this->data[$class][$id])) {
+            $this->data[$class][$id] = array();
+        }
+        $trace = debug_backtrace();
+        $this->data[$class][$id][] = $trace[5]['file'] . ':' . $trace[5]['line'];
 
-		$this->loadedModels++;
-	}
+        $this->loadedModels++;
+    }
 
-	/**
-	 * Process data and write to log
-	 */
-	public function __destruct() {
+    /**
+     * Process data and write to log
+     */
+    public function __destruct()
+    {
 
-		// remove every id that was called only once
-		foreach ($this->data as $className => $classes) {
-			foreach ($classes as $id => $lineAndFiles) {
-				if (count($lineAndFiles) <= 1) {
-					unset($this->data[$className][$id]);
-					if (count($this->data[$className]) == 0) {
-						unset($this->data[$className]);
-					}
-				}
-			}
-		}
+        // remove every id that was called only once
+        foreach ($this->data as $className => $classes) {
+            foreach ($classes as $id => $lineAndFiles) {
+                if (count($lineAndFiles) <= 1) {
+                    unset($this->data[$className][$id]);
+                    if (count($this->data[$className]) == 0) {
+                        unset($this->data[$className]);
+                    }
+                }
+            }
+        }
 
-		Mage::log(var_export($this->data, true));
-		Mage::log('Total number of loaded models: ' . $this->loadedModels);
-	}
+        Mage::log(var_export($this->data, true));
+        Mage::log('Total number of loaded models: ' . $this->loadedModels);
+    }
 
 }
