@@ -21,10 +21,11 @@ class Aoe_ModelCache_Helper_Data extends Mage_Core_Helper_Abstract
      * @param int    $id
      * @param string $field
      * @param bool   $clean
+     * @param bool   $logErrors
      *
      * @return Mage_Core_Model_Abstract|bool
      */
-    public function get($model, $id, $field = null, $clean = false)
+    public function get($model, $id, $field = null, $clean = false, $logErrors = true)
     {
         if ($clean) {
             $this->removeFromCache($model, $id);
@@ -38,8 +39,9 @@ class Aoe_ModelCache_Helper_Data extends Mage_Core_Helper_Abstract
             $object = Mage::getModel($model);
             /* @var $object Mage_Core_Model_Abstract */
             if (!$object) {
-                // Mage::throwException(sprintf('Could not find model "%s"', htmlspecialchars($model)));
-                Mage::log(sprintf('Could not find model "%s"', htmlspecialchars($model)));
+                if ($logErrors) {
+                    Mage::log(sprintf('Could not find model "%s"', htmlspecialchars($model)));
+                }
                 $object = false;
             } else {
 
@@ -52,8 +54,9 @@ class Aoe_ModelCache_Helper_Data extends Mage_Core_Helper_Abstract
                 }
 
                 if ((!isset($field) && $object->getId() != $id) || $object->getData($field) != $id) {
-                    // Mage::throwException(sprintf('Model "%s" with id "%s" not found', htmlspecialchars($model), htmlspecialchars($id)));
-                    Mage::log(sprintf('Model "%s" with id "%s" not found', htmlspecialchars($model), htmlspecialchars($id)));
+                    if ($logErrors) {
+                        Mage::log(sprintf('Model "%s" with id "%s" not found', htmlspecialchars($model), htmlspecialchars($id)));
+                    }
                 } else {
                     // Also add the object to the cache by id field name if loaded by attribute
                     if (isset($field) && $field != $object->getIdFieldName()) {
