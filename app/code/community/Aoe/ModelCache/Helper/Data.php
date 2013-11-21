@@ -270,9 +270,12 @@ class Aoe_ModelCache_Helper_Data extends Mage_Core_Helper_Abstract
             $aliasFields = array_keys($this->_cache[$modelMetadata['class']]['aliases']);
         }
         foreach ($aliasFields as $aliasField) {
-            foreach ($this->_cache[$modelMetadata['class']]['aliases'][$aliasField] as $value => $objectId) {
-                if ($objectId == $id) {
-                    unset($this->_cache[$modelMetadata['class']]['aliases'][$aliasField][$value]);
+            if (isset($this->_cache[$modelMetadata['class']]) && is_array($this->_cache[$modelMetadata['class']])
+                && isset($this->_cache[$modelMetadata['class']]['aliases'][$aliasField]) && is_array($this->_cache[$modelMetadata['class']]['aliases'][$aliasField])) {
+                foreach ($this->_cache[$modelMetadata['class']]['aliases'][$aliasField] as $value => $objectId) {
+                    if ($objectId == $id) {
+                        unset($this->_cache[$modelMetadata['class']]['aliases'][$aliasField][$value]);
+                    }
                 }
             }
         }
