@@ -17,7 +17,7 @@ class Aoe_ModelCache_Helper_Data extends Mage_Core_Helper_Abstract
      * Get model
      *
      * @param string $model
-     * @param int    $id
+     * @param mixed  $id
      * @param string $field
      * @param bool   $clean
      * @param bool   $logErrors
@@ -26,6 +26,10 @@ class Aoe_ModelCache_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function get($model, $id, $field = null, $clean = false, $logErrors = true)
     {
+        if (is_string($id)) {
+            $id = strtoupper($id);
+        }
+
         if ($clean) {
             $this->removeFromCache($model, $id);
         }
@@ -186,7 +190,14 @@ class Aoe_ModelCache_Helper_Data extends Mage_Core_Helper_Abstract
                 if (!empty($field) && $field !== $modelMetadata['id_field']) {
                     $aliasFields[] = $field;
                 }
-                $this->store($model, $object, $aliasFields, !$useSearch);
+
+                // We shouldn't let set exceptions happen from within a getter
+                try{
+                    $this->store($model, $object, $aliasFields, !$useSearch);
+                } catch (Mage_Core_Exception $e) {
+                    Mage::log($e->getMessage());
+                }
+
             }
         }
 
