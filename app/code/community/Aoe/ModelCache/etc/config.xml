@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Aoe_ModelCache>
-            <version>0.0.2</version>
+            <version>0.0.3</version>
         </Aoe_ModelCache>
     </modules>
     <global>
