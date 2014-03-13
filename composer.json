@@ -1,0 +1,16 @@
+{
+    "name": "AOEpeople/Aoe_ModelCache",
+    "license": "OSL-3.0",
+    "type": "magento-module",
+    "description": "Magento Model Cache",
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    },
+    "authors":[
+        {
+            "name":"Fabrizio Branca",
+            "email":"{firstname}.{lastname}@aoe.com"
+        }
+    ]
+}
+
