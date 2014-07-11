@@ -25,7 +25,7 @@ class Aoe_ModelCache_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return Mage_Core_Model_Abstract|bool
      */
-    public function get($model, $id, $field = null, $clean = false, $logErrors = true)
+    public function get($model, $id, $field = null, $clean = false, $logErrors = false)
     {
         if ($clean) {
             $this->removeFromCache($model, $id);
