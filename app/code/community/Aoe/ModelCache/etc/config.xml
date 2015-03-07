@@ -19,7 +19,7 @@
             </aoe_modelcache>
         </models>
 
-        <!--<events>
+        <events>
             <model_load_before>
                 <observers>
                     <aoe_modelcache>
@@ -29,7 +29,15 @@
                     </aoe_modelcache>
                 </observers>
             </model_load_before>
-        </events>-->
+        </events>
 
     </global>
+    <default>
+        <dev>
+            <aoe_modelcache>
+                <log_active>0</log_active>
+                <log_file>aoemodelcache.log</log_file>
+            </aoe_modelcache>
+        </dev>
+    </default>
 </config>
