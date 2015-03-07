@@ -30,8 +30,8 @@ for future calls without the clean parameter
 
 ## Finding candidates for optimization
 
-Uncomment the event in app/code/community/Aoe_ModelCache/etc/config.xml and check var/log/system.log after hitting a page.
-You'll find all occurrences of models that have been loaded more than once incl. file and line where the call happenend.
+Enable the log from System > Configuration > ADVANCED > Developer > AOE Model Cache Log Settings and check var/log/aoemodelcache.log after hitting a page.
+You'll find all occurrences of models that have been loaded more than once incl. file and line where the call happened.
 These items are candidates for replacement by model cache calls.
 
 ## Caution!
