@@ -1,5 +1,5 @@
 {
-    "name": "AOEpeople/Aoe_ModelCache",
+    "name": "aoepeople/aoe_modelcache",
     "license": "OSL-3.0",
     "type": "magento-module",
     "description": "Magento Model Cache",
@@ -9,7 +9,7 @@
     "authors":[
         {
             "name":"Fabrizio Branca",
-            "email":"{firstname}.{lastname}@aoe.com"
+            "email":"firstname.lastname@aoe.com"
         }
     ]
 }
